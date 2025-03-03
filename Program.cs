@@ -1,4 +1,8 @@
 ﻿using DSA;
+using NutritionManagementSystem.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using NutritionManagement;
 
 class Program
@@ -10,6 +14,12 @@ class Program
     {
         InitializeSystem(); // Load data
         ShowMainMenu(); // Display the main menu
+        Meals = new Dictionary<string, MealPlan>();
+    }
+
+    public static void AddMeal(string mealType, MealPlan meal)
+    {
+        Meals[mealType] = meal;
     }
 
     static void InitializeSystem()
@@ -25,15 +35,12 @@ class Program
         {
             Console.WriteLine("\nMain Menu:");
             Console.WriteLine("1. Search Food");
-
-
             Console.WriteLine("2. Show Top 50 Foods by Nutrient");
             Console.WriteLine("3. Log Food Consumption");
             Console.WriteLine("4. View Food Log");
-
             Console.WriteLine("5. Sort Foods (Performance Test)");
-
-            Console.WriteLine("6. Exit");
+            Console.WriteLine("6. Create Meal Plan");
+            Console.WriteLine("7. Exit");
             Console.Write("Choice: ");
 
             string choice = Console.ReadLine()!.Trim();
@@ -42,11 +49,9 @@ class Program
                 case "1":
                     SearchFood();
                     break;
-
                 case "2":
                     ShowTop50NutrientMenu();
                     break;
-
                 case "3":
                     LogFood();
                     break;
@@ -56,9 +61,10 @@ class Program
                 case "5":
                     RunPerformanceAnalysis();
                     break;
-
-
                 case "6":
+                    CreateMealPlan();
+                    break;
+                case "7":
                     Console.WriteLine("Exiting... Goodbye!");
                     Environment.Exit(0);
                     break;
@@ -122,6 +128,7 @@ class Program
 
         Console.WriteLine($"\nSearch Results for '{query}':");
         searchResults.ShowResults();
+        
     }
 
     // Method to log food consumption
@@ -179,15 +186,9 @@ class Program
         Console.WriteLine("| Algorithm | Criteria       | Time (ms) |");
         Console.WriteLine("|-----------|----------------|-----------|");
 
-
-        // var res = TimeSort("Merge", "protein");
-        // var tst = new SearchResults();
-        //tst.Res = res;
         TimeSort("Merge", "protein");
-        TimeSort("Bubble", "Calories");
+        TimeSort("Bubble", "calories");
         TimeSort("Quick", "carbohydrates");
-        //tst.ShowResults();
-
     }
 
     // Helper method to time sorting algorithms
@@ -232,8 +233,9 @@ class Program
             );
         }
 
-        Console.WriteLine("└────┴──────────────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘");
+        Console.WriteLine("└────┴──────────────────────┴────────────┴────────────┴────────────┴────────────┘");
     }
+
     // Method to sort foods by a specific nutrient
     static DynamicArray<Food> SortByNutrient(string nutrient)
     {
@@ -263,6 +265,144 @@ class Program
         }
 
         return sortedFoods;
+    }
+
+    static void CreateMealPlan()
+    {
+        Console.Write("Enter meal plan name: ");
+        string mealPlanName = Console.ReadLine()!.Trim();
+
+        // Create a list to store all meals in the meal plan
+        List<MealPlan> meals = new List<MealPlan>();
+
+        string[] mealTypes = { "Breakfast", "Lunch", "Dinner" };
+
+        foreach (var mealType in mealTypes)
+        {
+            Console.WriteLine($"\nPlanning {mealType}:");
+            MealPlan meal = new MealPlan(mealType);
+
+            while (true)
+            {
+                Console.Write($"Enter food name to add to {mealType} (or 'done' to finish): ");
+                string foodName = Console.ReadLine()!.Trim();
+                if (foodName.ToLower() == "done")
+                    break;
+
+                Food? food = null;
+                for (int i = 0; i < store!.Foods.Count; i++)
+                {
+                    if (store.Foods.At(i).Name.Equals(foodName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        food = store.Foods.At(i);
+                        break;
+                    }
+                }
+
+                if (food != null)
+                {
+                    meal.AddFood(food);
+                    Console.WriteLine($"{food.Name} added to {mealType}.");
+                }
+                else
+                {
+                    Console.WriteLine("Food not found in the database.");
+                }
+            }
+
+            meals.Add(meal); // Add the meal to the meal plan
+        }
+
+        // Calculate totals for the entire meal plan
+        double totalCalories = 0;
+        double totalProtein = 0;
+        double totalCarbohydrates = 0;
+        double totalFat = 0;
+        double totalVitaminC = 0;
+
+        foreach (var meal in meals)
+        {
+            totalCalories += meal.TotalCalories();
+            totalProtein += meal.TotalProtein();
+            totalCarbohydrates += meal.TotalCarbohydrates();
+            totalFat += meal.TotalFat();
+            totalVitaminC += meal.TotalVitaminC();
+        }
+
+        Console.WriteLine($"\nMeal Plan '{mealPlanName}' created successfully!");
+        Console.WriteLine($"Total Calories: {totalCalories:F2}");
+        Console.WriteLine($"Total Protein: {totalProtein:F2}g");
+        Console.WriteLine($"Total Carbohydrates: {totalCarbohydrates:F2}g");
+        Console.WriteLine($"Total Fat: {totalFat:F2}g");
+        Console.WriteLine($"Total Vitamin C: {totalVitaminC:F2}mg");
+    }
+    public static Dictionary<string, MealPlan> Meals { get; private set; } = new Dictionary<string, MealPlan>();
+
+    public class MealPlan
+    {
+        public string Name { get; set; }
+        public List<Food> Foods { get; private set; }
+
+        public MealPlan(string name)
+        {
+            Name = name;
+            Foods = new List<Food>();
+        }
+
+        public void AddFood(Food food)
+        {
+            Foods.Add(food);
+        }
+
+        public double TotalCalories()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Calories;
+            }
+            return total;
+        }
+
+        public double TotalProtein()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Protein;
+            }
+            return total;
+        }
+
+        public double TotalCarbohydrates()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Carbohydrates;
+            }
+            return total;
+        }
+
+        public double TotalFat()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Fat;
+            }
+            return total;
+        }
+
+        public double TotalVitaminC()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.VitaminC;
+            }
+            return total;
+        }
     }
 
     class Loader

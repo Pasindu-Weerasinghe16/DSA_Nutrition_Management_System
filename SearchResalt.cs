@@ -81,7 +81,7 @@ namespace NutritionManagement
             Console.WriteLine(midLine);
 
             int id = 1;
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < Math.Min(200, Res.Count); i++)
             {
                 Food food = Res.At(i);
                 Console.WriteLine(

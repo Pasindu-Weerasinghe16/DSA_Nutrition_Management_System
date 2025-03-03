@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+
+namespace NutritionManagementSystem.Models
+{
+    public class Meal
+    {
+        public string MealType { get; set; }
+        public List<Food> Foods { get; private set; }
+
+        public Meal(string mealType)
+        {
+            MealType = mealType;
+            Foods = new List<Food>();
+        }
+
+        public void AddFood(Food food)
+        {
+            Foods.Add(food);
+        }
+
+        public void RemoveFood(Food food)
+        {
+            Foods.Remove(food);
+        }
+
+        public double TotalCalories()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Calories;
+            }
+            return total;
+        }
+
+        public double TotalProtein()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Protein;
+            }
+            return total;
+        }
+
+        public double TotalCarbohydrates()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Carbohydrates;
+            }
+            return total;
+        }
+
+        public double TotalFat()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.Fat;
+            }
+            return total;
+        }
+
+        public double TotalVitaminC()
+        {
+            double total = 0;
+            foreach (var food in Foods)
+            {
+                total += food.VitaminC;
+            }
+            return total;
+        }
+    }
+}
