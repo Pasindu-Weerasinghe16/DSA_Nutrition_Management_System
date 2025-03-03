@@ -6,7 +6,8 @@ namespace NutritionManagement
     {
         public DynamicArray<Food> Res { get; set; }
 
-        public SearchResults()
+        public
+        SearchResults()
         {
             Res = new DynamicArray<Food>();
         }
@@ -80,7 +81,7 @@ namespace NutritionManagement
             Console.WriteLine(midLine);
 
             int id = 1;
-            for (int i = 0; i < Res.Count; i++)
+            for (int i = 0; i < 200; i++)
             {
                 Food food = Res.At(i);
                 Console.WriteLine(

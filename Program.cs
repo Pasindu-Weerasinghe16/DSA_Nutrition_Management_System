@@ -25,10 +25,15 @@ class Program
         {
             Console.WriteLine("\nMain Menu:");
             Console.WriteLine("1. Search Food");
-            Console.WriteLine("2. Log Food Consumption");
-            Console.WriteLine("3. View Food Log");
-            Console.WriteLine("4. Sort Foods (Performance Test)");
-            Console.WriteLine("5. Exit");
+
+
+            Console.WriteLine("2. Show Top 50 Foods by Nutrient");
+            Console.WriteLine("3. Log Food Consumption");
+            Console.WriteLine("4. View Food Log");
+
+            Console.WriteLine("5. Sort Foods (Performance Test)");
+
+            Console.WriteLine("6. Exit");
             Console.Write("Choice: ");
 
             string choice = Console.ReadLine()!.Trim();
@@ -37,23 +42,65 @@ class Program
                 case "1":
                     SearchFood();
                     break;
+
                 case "2":
+                    ShowTop50NutrientMenu();
+                    break;
+
+                case "3":
                     LogFood();
                     break;
-                case "3":
+                case "4":
                     ShowFoodLog();
                     break;
-                case "4":
+                case "5":
                     RunPerformanceAnalysis();
                     break;
-                case "5":
+
+
+                case "6":
                     Console.WriteLine("Exiting... Goodbye!");
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid choice. Please enter a number between 1-5.");
+                    Console.WriteLine("Invalid choice. Please enter a number between 1-7.");
                     break;
             }
+        }
+    }
+
+    // New method to show the top 50 nutrient menu
+    static void ShowTop50NutrientMenu()
+    {
+        Console.WriteLine("\nSelect Nutrient:");
+        Console.WriteLine("1. Protein");
+        Console.WriteLine("2. Calories");
+        Console.WriteLine("3. Carbohydrates");
+        Console.WriteLine("4. Fat");
+        Console.WriteLine("5. Vitamin C");
+        Console.Write("Choice: ");
+
+        string choice = Console.ReadLine()!.Trim();
+        switch (choice)
+        {
+            case "1":
+                ShowTop50Foods("protein");
+                break;
+            case "2":
+                ShowTop50Foods("calories");
+                break;
+            case "3":
+                ShowTop50Foods("carbohydrates");
+                break;
+            case "4":
+                ShowTop50Foods("fat");
+                break;
+            case "5":
+                ShowTop50Foods("vitamin c");
+                break;
+            default:
+                Console.WriteLine("Invalid choice.");
+                break;
         }
     }
 
@@ -133,9 +180,13 @@ class Program
         Console.WriteLine("|-----------|----------------|-----------|");
 
 
-        var res = TimeSort("Bubble", "calories");
+        // var res = TimeSort("Merge", "protein");
+        // var tst = new SearchResults();
+        //tst.Res = res;
         TimeSort("Merge", "protein");
+        TimeSort("Bubble", "Calories");
         TimeSort("Quick", "carbohydrates");
+        //tst.ShowResults();
 
     }
 
@@ -154,6 +205,65 @@ class Program
         return tempArray;
     }
 
+    static void ShowTop50Foods(string nutrient)
+    {
+        if (store == null || store.Foods.Count == 0)
+        {
+            Console.WriteLine("No food items available.");
+            return;
+        }
+
+        // Sort foods by the selected nutrient
+        var sortedFoods = SortByNutrient(nutrient);
+
+        // Display the top 50 foods
+        Console.WriteLine($"\nTop 50 Foods by {nutrient}:");
+        Console.WriteLine("┌────┬──────────────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐");
+        Console.WriteLine("│ ID │ Food Name            │ Calories   │ Protein    │ Carbs      │ Fat        │ Vit C      │");
+        Console.WriteLine("├────┼──────────────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤");
+
+        int count = Math.Min(50, sortedFoods.Count); // Show top 50 or all available foods
+        for (int i = 0; i < count; i++)
+        {
+            Food food = sortedFoods.At(i);
+            Console.WriteLine(
+                $"│ {i + 1,-2} │ {food.Name,-20} │ {food.Calories,10:F2} │ {food.Protein,10:F2} │ " +
+                $"{food.Carbohydrates,10:F2} │ {food.Fat,10:F2} │ {food.VitaminC,10:F2} │"
+            );
+        }
+
+        Console.WriteLine("└────┴──────────────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘");
+    }
+    // Method to sort foods by a specific nutrient
+    static DynamicArray<Food> SortByNutrient(string nutrient)
+    {
+        var sortedFoods = new DynamicArray<Food>();
+        for (int i = 0; i < store!.Foods.Count; i++)
+            sortedFoods.AddLast(store.Foods.At(i));
+
+        switch (nutrient.ToLower())
+        {
+            case "protein":
+                sortedFoods.Sort((a, b) => b.Protein.CompareTo(a.Protein));
+                break;
+            case "calories":
+                sortedFoods.Sort((a, b) => b.Calories.CompareTo(a.Calories));
+                break;
+            case "carbohydrates":
+                sortedFoods.Sort((a, b) => b.Carbohydrates.CompareTo(a.Carbohydrates));
+                break;
+            case "fat":
+                sortedFoods.Sort((a, b) => b.Fat.CompareTo(a.Fat));
+                break;
+            case "vitamin c":
+                sortedFoods.Sort((a, b) => b.VitaminC.CompareTo(a.VitaminC));
+                break;
+            default:
+                throw new ArgumentException("Invalid nutrient specified.");
+        }
+
+        return sortedFoods;
+    }
 
     class Loader
     {

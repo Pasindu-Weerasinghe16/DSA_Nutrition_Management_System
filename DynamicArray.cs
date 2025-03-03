@@ -9,7 +9,7 @@ public class DynamicArray<T>
     private T[] Items { get; set; }
     public int Count { get; private set; } = 0;
 
-    private  int size;
+    private int size;
 
 
     public DynamicArray()
@@ -74,13 +74,13 @@ public class DynamicArray<T>
 
         Items[index] = item;
         Count++;
-        
+
         if (Count == size)
         {
             Expand();
         }
     }
-    
+
     public void RemoveAt(int index)
     {
         if (index < 0 || index >= Count)
@@ -129,46 +129,61 @@ public class DynamicArray<T>
         Items[index] = item;
     }
 
-    public T? Find(T value) {
-        for (int i = 0; i < Count; i++) {
-            if (Items[i]!.Equals(value)) {
+    public T? Find(T value)
+    {
+        for (int i = 0; i < Count; i++)
+        {
+            if (Items[i]!.Equals(value))
+            {
                 return Items[i];
             }
         }
         return default(T);
     }
 
-    public T? Find<T1> (T1 value, Func<T, T1> key) {
-        for (int i = 0; i < Count; i++) {
-            if (key(Items[i]!)!.Equals(value)) {
+    public T? Find<T1>(T1 value, Func<T, T1> key)
+    {
+        for (int i = 0; i < Count; i++)
+        {
+            if (key(Items[i]!)!.Equals(value))
+            {
                 return Items[i];
             }
         }
         return default(T);
     }
 
-    public bool Contains(T value) {
-        for (int i = 0; i < Count; i++) {
-            if (Items[i]!.Equals(value)) {
+    public bool Contains(T value)
+    {
+        for (int i = 0; i < Count; i++)
+        {
+            if (Items[i]!.Equals(value))
+            {
                 return true;
             }
         }
         return false;
     }
 
-    public bool Contains(Func<T, bool> comp) {
-        for (int i = 0; i < Count; i++) {
-            if (comp(Items[i]!)) {
+    public bool Contains(Func<T, bool> comp)
+    {
+        for (int i = 0; i < Count; i++)
+        {
+            if (comp(Items[i]!))
+            {
                 return true;
             }
         }
         return false;
     }
 
-    public DynamicArray<T> Filter(Func<T, bool> key) {
+    public DynamicArray<T> Filter(Func<T, bool> key)
+    {
         DSA.DynamicArray<T> ret = new();
-        for (int i = 0; i < Count; i++) {
-            if (key(Items[i]!)) {
+        for (int i = 0; i < Count; i++)
+        {
+            if (key(Items[i]!))
+            {
                 ret.AddLast(Items[i]!);
             }
         }
@@ -187,6 +202,11 @@ public class DynamicArray<T>
             }
         }
         return $"[{ret}]";
+    }
+
+    public void Sort(Comparison<T> comparison)
+    {
+        Array.Sort(this.Items, 0, this.Count, Comparer<T>.Create(comparison));
     }
 }
 
