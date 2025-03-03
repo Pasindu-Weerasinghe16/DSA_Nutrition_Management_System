@@ -3,7 +3,7 @@ using NutritionManagement;
 
 public static class SortingAlgorithms
 {
-    // Member 1: Bubble Sort (Calories)
+
     public static void BubbleSort(DynamicArray<Food> arr, string criteria)
     {
         for (int i = 0; i < arr.Count - 1; i++)
@@ -12,12 +12,12 @@ public static class SortingAlgorithms
                     Swap(arr, j, j + 1);
     }
 
-    // Member 2: Merge Sort (Protein)
+
     public static void MergeSort(DynamicArray<Food> arr, string criteria)
     {
         if (arr.Count <= 1) return;
 
-        // Split the array into two halves
+
         int mid = arr.Count / 2;
         DynamicArray<Food> left = new DynamicArray<Food>();
         DynamicArray<Food> right = new DynamicArray<Food>();
@@ -27,11 +27,11 @@ public static class SortingAlgorithms
         for (int i = mid; i < arr.Count; i++)
             right.AddLast(arr.At(i));
 
-        // Recursively sort both halves
+
         MergeSort(left, criteria);
         MergeSort(right, criteria);
 
-        // Merge the sorted halves
+
         Merge(arr, left, right, criteria);
     }
 
@@ -47,16 +47,16 @@ public static class SortingAlgorithms
                 arr.Set(k++, right.At(j++));
         }
 
-        // Copy remaining elements from left (if any)
+
         while (i < left.Count)
             arr.Set(k++, left.At(i++));
 
-        // Copy remaining elements from right (if any)
+
         while (j < right.Count)
             arr.Set(k++, right.At(j++));
     }
 
-    // Member 3: Quick Sort (Carbohydrates)
+
     public static void QuickSort(DynamicArray<Food> arr, string criteria)
     {
         QuickSortHelper(arr, 0, arr.Count - 1, criteria);
@@ -66,27 +66,27 @@ public static class SortingAlgorithms
     {
         if (low < high)
         {
-            int pi = Partition(arr, low, high, criteria); // Partition index
-            QuickSortHelper(arr, low, pi - 1, criteria); // Sort left subarray
-            QuickSortHelper(arr, pi + 1, high, criteria); // Sort right subarray
+            int pi = Partition(arr, low, high, criteria);
+            QuickSortHelper(arr, low, pi - 1, criteria);
+            QuickSortHelper(arr, pi + 1, high, criteria);
         }
     }
 
     private static int Partition(DynamicArray<Food> arr, int low, int high, string criteria)
     {
-        Food pivot = arr.At(high); // Pivot element
-        int i = low - 1; // Index of smaller element
+        Food pivot = arr.At(high);
+        int i = low - 1;
 
         for (int j = low; j < high; j++)
         {
             if (GetValue(arr.At(j), criteria) <= GetValue(pivot, criteria))
             {
                 i++;
-                Swap(arr, i, j); // Swap elements
+                Swap(arr, i, j);
             }
         }
 
-        Swap(arr, i + 1, high); // Swap pivot to its correct position
+        Swap(arr, i + 1, high);
         return i + 1;
     }
 

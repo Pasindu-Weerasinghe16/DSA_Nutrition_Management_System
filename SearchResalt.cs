@@ -20,10 +20,10 @@ namespace NutritionManagement
                 return;
             }
 
-            // Get terminal width dynamically
+
             int terminalWidth = Console.WindowWidth;
 
-            // Define fixed column widths
+
             int idWidth = 4;
             int caloriesWidth = 10;
             int proteinWidth = 10;
@@ -31,11 +31,11 @@ namespace NutritionManagement
             int fatWidth = 10;
             int vitaminCWidth = 10;
 
-            // Calculate remaining space for the name column
-            int remainingSpace = terminalWidth - (idWidth + caloriesWidth + proteinWidth + carbsWidth + fatWidth + vitaminCWidth + 19); // 19 accounts for dividers
+
+            int remainingSpace = terminalWidth - (idWidth + caloriesWidth + proteinWidth + carbsWidth + fatWidth + vitaminCWidth + 19);
             int nameWidth = Math.Max(20, remainingSpace);
 
-            // Column headers
+
             string idCol = "ID";
             string nameCol = "Food Name";
             string calCol = "Calories";
@@ -44,7 +44,7 @@ namespace NutritionManagement
             string fatCol = "Fat";
             string vitCCol = "Vit C";
 
-            // Table Borders
+
             string topLine = "┌" + new string('─', idWidth + 2) +
                       "┬" + new string('─', nameWidth + 2) +
                       "┬" + new string('─', caloriesWidth + 2) +
@@ -72,7 +72,7 @@ namespace NutritionManagement
             Console.WriteLine("\nSearch Results:");
             Console.WriteLine(topLine);
 
-            // Header Row
+
             Console.WriteLine(
                 $"│ {idCol.PadRight(idWidth)} │ {nameCol.PadRight(nameWidth)} │ {calCol.PadRight(caloriesWidth)} │ " +
                 $"{proteinCol.PadRight(proteinWidth)} │ {carbsCol.PadRight(carbsWidth)} │ {fatCol.PadRight(fatWidth)} │ {vitCCol.PadRight(vitaminCWidth)} │"

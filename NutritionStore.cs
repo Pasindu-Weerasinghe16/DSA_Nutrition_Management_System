@@ -8,9 +8,9 @@ namespace NutritionManagement
 
         public NutritionStore(DynamicArray<Food> foods) => Foods = foods;
 
-        // Existing ShowFoods() method
 
-        // New method for sorting
+
+
         public void SortFoods(string criteria, string algorithm)
         {
             switch (algorithm.ToLower())

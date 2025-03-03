@@ -1,5 +1,4 @@
 ﻿using DSA;
-using NutritionManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,13 +6,13 @@ using NutritionManagement;
 
 class Program
 {
-    static User currentUser = new User(); // Track the current user
-    static NutritionStore? store; // Store the nutrition data
+    static User currentUser = new User();
+    static NutritionStore? store;
 
     static void Main()
     {
-        InitializeSystem(); // Load data
-        ShowMainMenu(); // Display the main menu
+        InitializeSystem();
+        ShowMainMenu();
         Meals = new Dictionary<string, MealPlan>();
     }
 
@@ -24,8 +23,8 @@ class Program
 
     static void InitializeSystem()
     {
-        // Load nutrition data from file
-        Loader loader = new Loader("food_data.txt"); // Ensure the file exists
+
+        Loader loader = new Loader("food_data.txt");
         store = loader.Read();
     }
 
@@ -33,15 +32,24 @@ class Program
     {
         while (true)
         {
-            Console.WriteLine("\nMain Menu:");
+            Console.WriteLine(" \n");
+            Console.WriteLine("===================================");
+            Console.WriteLine("       Nutrition Management        ");
+            Console.WriteLine("===================================");
             Console.WriteLine("1. Search Food");
-            Console.WriteLine("2. Show Top 50 Foods by Nutrient");
-            Console.WriteLine("3. Log Food Consumption");
-            Console.WriteLine("4. View Food Log");
-            Console.WriteLine("5. Sort Foods (Performance Test)");
+            Console.WriteLine("2. Show Top 100 Foods by Nutrient");
+            Console.WriteLine("3. My Food List");
+            Console.WriteLine("4. View MY Food List");
+            Console.WriteLine("5. Show Daily Nutrient Needs");
             Console.WriteLine("6. Create Meal Plan");
-            Console.WriteLine("7. Exit");
+            Console.WriteLine("7. Add Meal to Meal Plan");
+            Console.WriteLine("8. Sort Foods (Performance Test)");
+            Console.WriteLine("10 Genarate Balance Meal Plane");
+            Console.WriteLine("9. Exit");
+            Console.WriteLine("===================================");
+            Console.WriteLine(" \n");
             Console.Write("Choice: ");
+
 
             string choice = Console.ReadLine()!.Trim();
             switch (choice)
@@ -50,7 +58,7 @@ class Program
                     SearchFood();
                     break;
                 case "2":
-                    ShowTop50NutrientMenu();
+                    ShowTop100NutrientMenu();
                     break;
                 case "3":
                     LogFood();
@@ -59,24 +67,60 @@ class Program
                     ShowFoodLog();
                     break;
                 case "5":
-                    RunPerformanceAnalysis();
+                    ShowDailyNutrientNeeds();
                     break;
                 case "6":
                     CreateMealPlan();
                     break;
+
                 case "7":
+                    AddMealToMealPlan();
+                    break;
+                case "8":
+                    RunPerformanceAnalysis();
+                    break;
+                case "10":
+                    GenerateBalancedMealPlan();
+                    break;
+
+
+                case "9":
                     Console.WriteLine("Exiting... Goodbye!");
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid choice. Please enter a number between 1-7.");
+                    Console.WriteLine("Invalid choice. Please enter a number between 1-11.");
                     break;
+            }
+
+            static void ShowDailyNutrientNeeds()
+            {
+
+                double dailyCalories = 2000;
+                double dailyProtein = 50;
+                double dailyCarbohydrates = 300;
+                double dailyFat = 70;
+                double dailyVitaminC = 90;
+
+                Console.WriteLine("==============================================");
+                Console.WriteLine("       DAILY NUTRIENT NEEDS");
+                Console.WriteLine("==============================================");
+                Console.WriteLine("┌──────────────────────┬──────────────┐");
+                Console.WriteLine("│ Nutrient             │ Daily Need   │");
+                Console.WriteLine("├──────────────────────┼──────────────┤");
+                Console.WriteLine($"│ Calories             │ {dailyCalories,10} kcal │");
+                Console.WriteLine($"│ Protein              │ {dailyProtein,10}g │");
+                Console.WriteLine($"│ Carbohydrates        │ {dailyCarbohydrates,10}g │");
+                Console.WriteLine($"│ Fat                  │ {dailyFat,10}g │");
+                Console.WriteLine($"│ Vitamin C            │ {dailyVitaminC,10}mg │");
+                Console.WriteLine("└──────────────────────┴──────────────┘");
+                Console.WriteLine("==============================================");
             }
         }
     }
 
-    // New method to show the top 50 nutrient menu
-    static void ShowTop50NutrientMenu()
+
+    static void ShowTop100NutrientMenu()
     {
         Console.WriteLine("\nSelect Nutrient:");
         Console.WriteLine("1. Protein");
@@ -90,19 +134,19 @@ class Program
         switch (choice)
         {
             case "1":
-                ShowTop50Foods("protein");
+                ShowTop100Foods("protein");
                 break;
             case "2":
-                ShowTop50Foods("calories");
+                ShowTop100Foods("calories");
                 break;
             case "3":
-                ShowTop50Foods("carbohydrates");
+                ShowTop100Foods("carbohydrates");
                 break;
             case "4":
-                ShowTop50Foods("fat");
+                ShowTop100Foods("fat");
                 break;
             case "5":
-                ShowTop50Foods("vitamin c");
+                ShowTop100Foods("vitamin c");
                 break;
             default:
                 Console.WriteLine("Invalid choice.");
@@ -110,7 +154,7 @@ class Program
         }
     }
 
-    // Method to search for food items
+
     static void SearchFood()
     {
         Console.Write("Enter food name to search: ");
@@ -128,16 +172,16 @@ class Program
 
         Console.WriteLine($"\nSearch Results for '{query}':");
         searchResults.ShowResults();
-        
+
     }
 
-    // Method to log food consumption
+
     static void LogFood()
     {
         Console.Write("Enter the name of the food you consumed: ");
         string foodName = Console.ReadLine()!.Trim();
 
-        // Search for the food in the store
+
         Food? food = null;
         for (int i = 0; i < store!.Foods.Count; i++)
         {
@@ -150,16 +194,53 @@ class Program
 
         if (food != null)
         {
-            currentUser.AddToLog(food); // Add to user's food log
-            Console.WriteLine($"{food.Name} logged successfully!");
+            currentUser.AddToLog(food);
+
+            Console.WriteLine("\n");
+
+            Console.WriteLine("==============================================");
+            Console.WriteLine("       FOOD LOGGED SUCCESSFULLY!              ");
+            Console.WriteLine("==============================================");
+
+
+
+            Console.WriteLine($"{"You've logged:",-20} {food.Name}");
+            Console.WriteLine($"{"Calories:",-20} {food.Calories,10:F2} kcal");
+            Console.WriteLine($"{"Protein:",-20} {food.Protein,10:F2} g");
+            Console.WriteLine($"{"Carbs:",-20} {food.Carbohydrates,10:F2} g");
+            Console.WriteLine($"{"Fat:",-20} {food.Fat,10:F2} g");
+            Console.WriteLine($"{"Vitamin C:",-20} {food.VitaminC,10:F2} mg");
+
+
+            Console.WriteLine("==============================================");
+            Console.WriteLine("                                              ");
+            Console.WriteLine("==============================================");
+            Console.ResetColor();
+            Console.WriteLine("\n");
+
         }
         else
         {
-            Console.WriteLine("Food not found in the database.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("==============================================");
+            Console.WriteLine("              FOOD NOT FOUND!                 ");
+            Console.WriteLine("==============================================");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("The food you entered is not in the database. ");
+            Console.WriteLine("Please check the spelling or add it manually.");
+            Console.ResetColor();
+
+            Console.WriteLine("==============================================");
+            Console.WriteLine("                 Try again!                  ");
+            Console.WriteLine("==============================================");
+            Console.WriteLine("\n");
+
         }
     }
 
-    // Method to show the user's food log
+
     static void ShowFoodLog()
     {
         Console.WriteLine("\nYour Food Log:");
@@ -179,9 +260,10 @@ class Program
         }
     }
 
-    // Method to compare sorting algorithm performance
     static void RunPerformanceAnalysis()
     {
+        Console.WriteLine("\n");
+
         Console.WriteLine("\nSorting Algorithm Performance:");
         Console.WriteLine("| Algorithm | Criteria       | Time (ms) |");
         Console.WriteLine("|-----------|----------------|-----------|");
@@ -189,9 +271,11 @@ class Program
         TimeSort("Merge", "protein");
         TimeSort("Bubble", "calories");
         TimeSort("Quick", "carbohydrates");
+        Console.WriteLine("\n");
+
     }
 
-    // Helper method to time sorting algorithms
+
     static DynamicArray<Food> TimeSort(string algorithm, string criteria)
     {
         var tempArray = new DynamicArray<Food>();
@@ -206,7 +290,7 @@ class Program
         return tempArray;
     }
 
-    static void ShowTop50Foods(string nutrient)
+    static void ShowTop100Foods(string nutrient)
     {
         if (store == null || store.Foods.Count == 0)
         {
@@ -214,16 +298,18 @@ class Program
             return;
         }
 
-        // Sort foods by the selected nutrient
+
         var sortedFoods = SortByNutrient(nutrient);
 
-        // Display the top 50 foods
-        Console.WriteLine($"\nTop 50 Foods by {nutrient}:");
+
+        Console.WriteLine("\n");
+
+        Console.WriteLine($"\nTop 100 Foods by {nutrient}:");
         Console.WriteLine("┌────┬──────────────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐");
         Console.WriteLine("│ ID │ Food Name            │ Calories   │ Protein    │ Carbs      │ Fat        │ Vit C      │");
         Console.WriteLine("├────┼──────────────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤");
 
-        int count = Math.Min(50, sortedFoods.Count); // Show top 50 or all available foods
+        int count = Math.Min(100, sortedFoods.Count);
         for (int i = 0; i < count; i++)
         {
             Food food = sortedFoods.At(i);
@@ -236,7 +322,7 @@ class Program
         Console.WriteLine("└────┴──────────────────────┴────────────┴────────────┴────────────┴────────────┘");
     }
 
-    // Method to sort foods by a specific nutrient
+
     static DynamicArray<Food> SortByNutrient(string nutrient)
     {
         var sortedFoods = new DynamicArray<Food>();
@@ -268,11 +354,14 @@ class Program
     }
 
     static void CreateMealPlan()
+
     {
+
+        Console.WriteLine("\n");
         Console.Write("Enter meal plan name: ");
         string mealPlanName = Console.ReadLine()!.Trim();
 
-        // Create a list to store all meals in the meal plan
+
         List<MealPlan> meals = new List<MealPlan>();
 
         string[] mealTypes = { "Breakfast", "Lunch", "Dinner" };
@@ -283,7 +372,10 @@ class Program
             MealPlan meal = new MealPlan(mealType);
 
             while (true)
+
             {
+                Console.WriteLine("\n");
+
                 Console.Write($"Enter food name to add to {mealType} (or 'done' to finish): ");
                 string foodName = Console.ReadLine()!.Trim();
                 if (foodName.ToLower() == "done")
@@ -301,6 +393,7 @@ class Program
 
                 if (food != null)
                 {
+
                     meal.AddFood(food);
                     Console.WriteLine($"{food.Name} added to {mealType}.");
                 }
@@ -310,10 +403,10 @@ class Program
                 }
             }
 
-            meals.Add(meal); // Add the meal to the meal plan
+            meals.Add(meal);
         }
 
-        // Calculate totals for the entire meal plan
+
         double totalCalories = 0;
         double totalProtein = 0;
         double totalCarbohydrates = 0;
@@ -328,30 +421,112 @@ class Program
             totalFat += meal.TotalFat();
             totalVitaminC += meal.TotalVitaminC();
         }
+        Console.WriteLine("\n");
 
         Console.WriteLine($"\nMeal Plan '{mealPlanName}' created successfully!");
-        Console.WriteLine($"Total Calories: {totalCalories:F2}");
-        Console.WriteLine($"Total Protein: {totalProtein:F2}g");
-        Console.WriteLine($"Total Carbohydrates: {totalCarbohydrates:F2}g");
-        Console.WriteLine($"Total Fat: {totalFat:F2}g");
-        Console.WriteLine($"Total Vitamin C: {totalVitaminC:F2}mg");
+        Console.WriteLine("===================================");
+        Console.WriteLine("| Nutrient          | Total       |");
+        Console.WriteLine("===================================");
+        Console.WriteLine($"| Total Calories    | {totalCalories,10:F2} |");
+        Console.WriteLine($"| Total Protein     | {totalProtein,10:F2}g |");
+        Console.WriteLine($"| Total Carbohydrates | {totalCarbohydrates,10:F2}g |");
+        Console.WriteLine($"| Total Fat         | {totalFat,10:F2}g |");
+        Console.WriteLine($"| Total Vitamin C   | {totalVitaminC,10:F2}mg |");
+        Console.WriteLine("===================================");
+        Console.WriteLine("\n");
+
+
     }
     public static Dictionary<string, MealPlan> Meals { get; private set; } = new Dictionary<string, MealPlan>();
+
+
+    static void AddMealToMealPlan()
+    {
+        Console.Write("Enter meal plan name: ");
+        string mealPlanName = Console.ReadLine()!.Trim();
+
+        if (!Meals.ContainsKey(mealPlanName))
+        {
+            Console.WriteLine($"Meal plan '{mealPlanName}' does not exist.");
+            return;
+        }
+
+        MealPlan mealPlan = Meals[mealPlanName];
+
+        Console.Write("Enter meal type (e.g., Breakfast, Lunch, Dinner): ");
+        string mealType = Console.ReadLine()!.Trim();
+
+        if (!mealPlan.Meals.ContainsKey(mealType))
+        {
+            mealPlan.Meals[mealType] = new List<Food>();
+        }
+
+        while (true)
+        {
+            Console.WriteLine("\n");
+
+            Console.Write($"Enter food name to add to {mealType} (or 'done' to finish): ");
+            string foodName = Console.ReadLine()!.Trim();
+            if (foodName.ToLower() == "done")
+                break;
+
+            Food? food = null;
+            for (int i = 0; i < store!.Foods.Count; i++)
+            {
+                if (store.Foods.At(i).Name.Equals(foodName, StringComparison.OrdinalIgnoreCase))
+                {
+                    food = store.Foods.At(i);
+                    break;
+                }
+            }
+
+            if (food != null)
+            {
+                mealPlan.Meals[mealType].Add(food);
+                Console.WriteLine($"{food.Name} added to {mealType}.");
+            }
+            else
+            {
+                Console.WriteLine("\n");
+
+                Console.WriteLine("Food not found in the database.");
+            }
+        }
+    }
+
+
 
     public class MealPlan
     {
         public string Name { get; set; }
         public List<Food> Foods { get; private set; }
 
+        public Dictionary<string, List<Food>> Meals { get; private set; }
+
         public MealPlan(string name)
         {
             Name = name;
             Foods = new List<Food>();
+            Meals = new Dictionary<string, List<Food>>();
         }
 
         public void AddFood(Food food)
         {
             Foods.Add(food);
+        }
+
+        public void RemoveMeal(string mealType)
+        {
+            if (Meals.ContainsKey(mealType))
+            {
+                Meals.Remove(mealType);
+            }
+            else
+            {
+                Console.WriteLine("\n");
+
+                throw new ArgumentException($"Meal type '{mealType}' does not exist.");
+            }
         }
 
         public double TotalCalories()
@@ -405,6 +580,36 @@ class Program
         }
     }
 
+
+    static void DeleteMealPlan()
+
+    {
+        Console.WriteLine("\n");
+
+        Console.Write("Enter meal plan name: ");
+        string mealPlanName = Console.ReadLine()!.Trim();
+
+        if (!Meals.ContainsKey(mealPlanName))
+        {
+            Console.WriteLine($"Meal plan '{mealPlanName}' does not exist.");
+            return;
+        }
+
+        MealPlan mealPlan = Meals[mealPlanName];
+
+        Console.Write("Enter meal type to delete (e.g., Breakfast, Lunch, Dinner): ");
+        string mealType = Console.ReadLine()!.Trim();
+
+        if (mealPlan.Meals.ContainsKey(mealType))
+        {
+            mealPlan.RemoveMeal(mealType);
+            Console.WriteLine($"Meal '{mealType}' removed from meal plan '{mealPlanName}'.");
+        }
+        else
+        {
+            Console.WriteLine($"Meal '{mealType}' does not exist in meal plan '{mealPlanName}'.");
+        }
+    }
     class Loader
     {
         public string FilePath { get; set; }
@@ -418,6 +623,10 @@ class Program
 
         public NutritionStore Read()
         {
+            Console.WriteLine("\n");
+            Console.WriteLine("\n");
+
+
             Console.WriteLine("Loading Nutrition Data...");
 
             using StreamReader sr = new(FilePath);
@@ -442,9 +651,214 @@ class Program
                     Console.WriteLine($"Error parsing food data: {ex.Message}");
                 }
             }
-
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{Foods.Count} food items loaded.");
+            Console.ResetColor();
             return new NutritionStore(Foods);
+
         }
     }
+    public class NewFood
+    {
+        public string Name { get; set; }
+        public double Calories { get; set; }
+        public double Protein { get; set; }
+        public double Carbohydrates { get; set; }
+        public double Fat { get; set; }
+        public double VitaminC { get; set; }
+
+        public NewFood(string name, double calories, double protein, double carbohydrates, double fat, double vitaminC)
+        {
+            Name = name;
+            Calories = calories;
+            Protein = protein;
+            Carbohydrates = carbohydrates;
+            Fat = fat;
+            VitaminC = vitaminC;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}: {Calories} Calories, {Protein}g Protein, {Carbohydrates}g Carbs, {Fat}g Fat, {VitaminC}mg Vitamin C";
+        }
+    }
+
+    public class AVLTreeNode
+    {
+        public NewFood Data { get; set; }
+        public AVLTreeNode? Left { get; set; }
+        public AVLTreeNode? Right { get; set; }
+        public int Height { get; set; }
+
+        public AVLTreeNode(NewFood data)
+        {
+            Data = data;
+            Left = null;
+            Right = null;
+            Height = 1;
+        }
+    }
+
+    public class AVLTree
+    {
+        private AVLTreeNode? root;
+
+        public AVLTree()
+        {
+            root = null;
+        }
+
+        public void Insert(NewFood food)
+        {
+            root = InsertRec(root, food);
+        }
+
+        private AVLTreeNode InsertRec(AVLTreeNode? node, NewFood food)
+        {
+            if (node == null)
+            {
+                return new AVLTreeNode(food);
+            }
+
+            if (string.Compare(food.Name, node.Data.Name, StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                node.Left = InsertRec(node.Left, food);
+            }
+            else if (string.Compare(food.Name, node.Data.Name, StringComparison.OrdinalIgnoreCase) > 0)
+            {
+                node.Right = InsertRec(node.Right, food);
+            }
+            else
+            {
+                return node;
+            }
+
+            node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
+
+            int balance = GetBalance(node);
+
+            if (balance > 1 && string.Compare(food.Name, node.Left!.Data.Name, StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                return RightRotate(node);
+            }
+
+            if (balance < -1 && string.Compare(food.Name, node.Right!.Data.Name, StringComparison.OrdinalIgnoreCase) > 0)
+            {
+                return LeftRotate(node);
+            }
+
+            if (balance > 1 && string.Compare(food.Name, node.Left!.Data.Name, StringComparison.OrdinalIgnoreCase) > 0)
+            {
+                node.Left = LeftRotate(node.Left);
+                return RightRotate(node);
+            }
+
+            if (balance < -1 && string.Compare(food.Name, node.Right!.Data.Name, StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                node.Right = RightRotate(node.Right);
+                return LeftRotate(node);
+            }
+
+            return node;
+        }
+
+        private int GetHeight(AVLTreeNode? node)
+        {
+            return node?.Height ?? 0;
+        }
+
+        private int GetBalance(AVLTreeNode? node)
+        {
+            return node == null ? 0 : GetHeight(node.Left) - GetHeight(node.Right);
+        }
+
+        private AVLTreeNode RightRotate(AVLTreeNode y)
+        {
+            AVLTreeNode x = y.Left!;
+            AVLTreeNode T2 = x.Right!;
+
+            x.Right = y;
+            y.Left = T2;
+
+            y.Height = Math.Max(GetHeight(y.Left), GetHeight(y.Right)) + 1;
+            x.Height = Math.Max(GetHeight(x.Left), GetHeight(x.Right)) + 1;
+
+            return x;
+        }
+
+        private AVLTreeNode LeftRotate(AVLTreeNode x)
+        {
+            AVLTreeNode y = x.Right!;
+            AVLTreeNode T2 = y.Left!;
+
+            y.Left = x;
+            x.Right = T2;
+
+            x.Height = Math.Max(GetHeight(x.Left), GetHeight(x.Right)) + 1;
+            y.Height = Math.Max(GetHeight(y.Left), GetHeight(y.Right)) + 1;
+
+            return y;
+        }
+
+        public List<NewFood> InOrderTraversal()
+        {
+            List<NewFood> foods = new List<NewFood>();
+            InOrderRec(root, foods);
+            return foods;
+        }
+
+        private void InOrderRec(AVLTreeNode? node, List<NewFood> foods)
+        {
+            if (node != null)
+            {
+                InOrderRec(node.Left, foods);
+                foods.Add(node.Data);
+                InOrderRec(node.Right, foods);
+            }
+        }
+    }
+
+    static AVLTree newFoodTree = new AVLTree();
+
+    static void GenerateBalancedMealPlan()
+    {
+        if (currentUser.FoodLog.Count < 5)
+        {
+            Console.WriteLine("Not enough food items to generate a balanced meal plan. Please log at least 5 food items.");
+            return;
+        }
+
+        foreach (var food in currentUser.FoodLog)
+        {
+            NewFood newFood = new NewFood(food.Name, food.Calories, food.Protein, food.Carbohydrates, food.Fat, food.VitaminC);
+            newFoodTree.Insert(newFood);
+        }
+
+        List<NewFood> foods = newFoodTree.InOrderTraversal();
+        Console.WriteLine("\n");
+        Console.WriteLine("\nBalanced Meal Plan:");
+        Console.WriteLine("===================================");
+
+
+        Console.WriteLine("\nBreakfast:");
+        for (int i = 0; i < foods.Count / 3; i++)
+        {
+            Console.WriteLine(foods[i]);
+        }
+
+        Console.WriteLine("\nLunch:");
+        for (int i = foods.Count / 3; i < 2 * foods.Count / 3; i++)
+        {
+            Console.WriteLine(foods[i]);
+        }
+
+        Console.WriteLine("\nDinner:");
+        for (int i = 2 * foods.Count / 3; i < foods.Count; i++)
+        {
+            Console.WriteLine(foods[i]);
+        }
+
+        Console.WriteLine("===================================");
+    }
+
 }
