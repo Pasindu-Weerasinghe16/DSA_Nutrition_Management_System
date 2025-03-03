@@ -1,0 +1,14 @@
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.GeneratedMSBuildEditorConfig.editorconfig
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.AssemblyInfoInputs.cache
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.AssemblyInfo.cs
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.csproj.CoreCompileInputs.cache
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/bin/Debug/net9.0/untitled folder
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/bin/Debug/net9.0/untitled folder.deps.json
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/bin/Debug/net9.0/untitled folder.runtimeconfig.json
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/bin/Debug/net9.0/untitled folder.dll
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/bin/Debug/net9.0/untitled folder.pdb
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.dll
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/refint/untitled folder.dll
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.pdb
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.genruntimeconfig.cache
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/ref/untitled folder.dll
