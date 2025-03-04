@@ -12,3 +12,4 @@
 /Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.pdb
 /Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.genruntimeconfig.cache
 /Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/ref/untitled folder.dll
+/Users/pasinduweerasinghe/DSA_Project/untitled folder/obj/Debug/net9.0/untitled folder.sourcelink.json

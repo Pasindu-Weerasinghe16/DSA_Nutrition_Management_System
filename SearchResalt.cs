@@ -24,12 +24,12 @@ namespace NutritionManagement
             int terminalWidth = Console.WindowWidth;
 
 
-            int idWidth = 4;
-            int caloriesWidth = 10;
-            int proteinWidth = 10;
-            int carbsWidth = 10;
-            int fatWidth = 10;
-            int vitaminCWidth = 10;
+            int idWidth = 10;
+            int caloriesWidth = 20;
+            int proteinWidth = 20;
+            int carbsWidth = 20;
+            int fatWidth = 20;
+            int vitaminCWidth = 20;
 
 
             int remainingSpace = terminalWidth - (idWidth + caloriesWidth + proteinWidth + carbsWidth + fatWidth + vitaminCWidth + 19);

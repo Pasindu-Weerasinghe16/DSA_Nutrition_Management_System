@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NutritionManagement;
+using System.Drawing;
 
 class Program
 {
@@ -33,22 +34,24 @@ class Program
         while (true)
         {
             Console.WriteLine(" \n");
-            Console.WriteLine("===================================");
-            Console.WriteLine("       Nutrition Management        ");
-            Console.WriteLine("===================================");
-            Console.WriteLine("1. Search Food");
-            Console.WriteLine("2. Show Top 100 Foods by Nutrient");
-            Console.WriteLine("3. My Food List");
-            Console.WriteLine("4. View MY Food List");
-            Console.WriteLine("5. Show Daily Nutrient Needs");
-            Console.WriteLine("6. Create Meal Plan");
-            Console.WriteLine("7. Add Meal to Meal Plan");
-            Console.WriteLine("8. Sort Foods (Performance Test)");
-            Console.WriteLine("10 Genarate Balance Meal Plane");
-            Console.WriteLine("9. Exit");
-            Console.WriteLine("===================================");
+            Console.WriteLine("========================================================");
+            Console.WriteLine("                   Nutrition Management                 ");
+            Console.WriteLine("========================================================");
+            Console.WriteLine("      1.  Search Food");
+            Console.WriteLine("      2.  Show Top 100 Foods by Nutrient");
+            Console.WriteLine("      3.  My Food List");
+            Console.WriteLine("      4.  View MY Food List");
+            Console.WriteLine("      5.  Genarate Balance Meal Plan");
+            Console.WriteLine("        (Please add at least 5 food items to My Food List)");
+            Console.WriteLine("      6.  Show Daily Nutrient Needs");
+            Console.WriteLine("      7.  Nutrition Calculator");
+            Console.WriteLine("      8.  Sort Foods (Performance Test)");
+
+            Console.WriteLine("      9. Exit");
+            Console.WriteLine("=======================================================");
             Console.WriteLine(" \n");
-            Console.Write("Choice: ");
+
+            Console.Write("Enter your Choice:  ");
 
 
             string choice = Console.ReadLine()!.Trim();
@@ -67,23 +70,17 @@ class Program
                     ShowFoodLog();
                     break;
                 case "5":
-                    ShowDailyNutrientNeeds();
+                    GenerateBalancedMealPlan();
                     break;
                 case "6":
-                    CreateMealPlan();
+                    ShowDailyNutrientNeeds();
                     break;
-
                 case "7":
-                    AddMealToMealPlan();
+                    CreateMealPlan();
                     break;
                 case "8":
                     RunPerformanceAnalysis();
                     break;
-                case "10":
-                    GenerateBalancedMealPlan();
-                    break;
-
-
                 case "9":
                     Console.WriteLine("Exiting... Goodbye!");
                     Environment.Exit(0);
@@ -102,19 +99,19 @@ class Program
                 double dailyFat = 70;
                 double dailyVitaminC = 90;
 
-                Console.WriteLine("==============================================");
-                Console.WriteLine("       DAILY NUTRIENT NEEDS");
-                Console.WriteLine("==============================================");
-                Console.WriteLine("┌──────────────────────┬──────────────┐");
-                Console.WriteLine("│ Nutrient             │ Daily Need   │");
-                Console.WriteLine("├──────────────────────┼──────────────┤");
-                Console.WriteLine($"│ Calories             │ {dailyCalories,10} kcal │");
-                Console.WriteLine($"│ Protein              │ {dailyProtein,10}g │");
-                Console.WriteLine($"│ Carbohydrates        │ {dailyCarbohydrates,10}g │");
-                Console.WriteLine($"│ Fat                  │ {dailyFat,10}g │");
-                Console.WriteLine($"│ Vitamin C            │ {dailyVitaminC,10}mg │");
-                Console.WriteLine("└──────────────────────┴──────────────┘");
-                Console.WriteLine("==============================================");
+                Console.WriteLine("================================================================");
+                Console.WriteLine("                   DAILY NUTRIENT NEEDS");
+                Console.WriteLine("================================================================");
+                Console.WriteLine("┌──────────────────────────────┬────────────────┐");
+                Console.WriteLine("│ Nutrient                     │ Daily Need     │");
+                Console.WriteLine("├──────────────────────────────┼────────────────┤");
+                Console.WriteLine($"│ {"Calories ",-24} │{dailyCalories.ToString().PadLeft(12)} kcal│");
+                Console.WriteLine($"│ {"Protein",-28} │ {dailyProtein.ToString().PadLeft(14)}g│");
+                Console.WriteLine($"│ {"Carbohydrates",-28} │ {dailyCarbohydrates.ToString().PadLeft(14)}g│");
+                Console.WriteLine($"│ {"Fat",-28} │ {dailyFat.ToString().PadLeft(14)}g│");
+                Console.WriteLine($"│ {"Vitamin C",-28} │ {dailyVitaminC.ToString().PadLeft(14)}mg│");
+                Console.WriteLine("└──────────────────────────────┴────────────────┘");
+                Console.WriteLine("================================================================");
             }
         }
     }
@@ -302,26 +299,27 @@ class Program
         var sortedFoods = SortByNutrient(nutrient);
 
 
+
         Console.WriteLine("\n");
 
         Console.WriteLine($"\nTop 100 Foods by {nutrient}:");
-        Console.WriteLine("┌────┬──────────────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐");
-        Console.WriteLine("│ ID │ Food Name            │ Calories   │ Protein    │ Carbs      │ Fat        │ Vit C      │");
-        Console.WriteLine("├────┼──────────────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤");
+        Console.WriteLine("┌──────────┬──────────────────────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┐");
+        Console.WriteLine("│ ID       │ Food Name                        │ Calories         │ Protein          │ Carbs            │ Fat              │ Vit C            │");
+        Console.WriteLine("├──────────┼──────────────────────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤");
 
         int count = Math.Min(100, sortedFoods.Count);
         for (int i = 0; i < count; i++)
         {
             Food food = sortedFoods.At(i);
             Console.WriteLine(
-                $"│ {i + 1,-2} │ {food.Name,-20} │ {food.Calories,10:F2} │ {food.Protein,10:F2} │ " +
-                $"{food.Carbohydrates,10:F2} │ {food.Fat,10:F2} │ {food.VitaminC,10:F2} │"
+                $"│ {i + 1,-8} │ {food.Name,-32} │ {food.Calories,16:F2} │ {food.Protein,16:F2} │ " +
+                $"{food.Carbohydrates,16:F2} │ {food.Fat,16:F2} │ {food.VitaminC,16:F2} │"
             );
         }
 
-        Console.WriteLine("└────┴──────────────────────┴────────────┴────────────┴────────────┴────────────┘");
-    }
+        Console.WriteLine("└──────────┴──────────────────────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┘");
 
+    }
 
     static DynamicArray<Food> SortByNutrient(string nutrient)
     {
@@ -824,7 +822,7 @@ class Program
     {
         if (currentUser.FoodLog.Count < 5)
         {
-            Console.WriteLine("Not enough food items to generate a balanced meal plan. Please log at least 5 food items.");
+            Console.WriteLine("Not enough food items to generate a balanced meal plan. Please add at least 5 food items to MY FOOD LIST.");
             return;
         }
 
